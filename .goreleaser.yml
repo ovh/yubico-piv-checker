@@ -1,0 +1,31 @@
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+nfpms:
+  -
+    package_name: ovh-yubico-piv-checker
+    vendor: OVH SAS
+    maintainer: Thomas SOËTE <thomas.soete@ovhcloud.com>
+    description: Tool to check Yubico PIV Attestation. See https://developers.yubico.com/yubico-piv-tool/Attestation.html
+    license: Apache 2.0
+    formats:
+      - deb
+      - rpm
