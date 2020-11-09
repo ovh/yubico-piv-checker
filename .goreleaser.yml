@@ -10,9 +10,25 @@ builds:
       - linux
       - windows
       - darwin
+      - freebsd
+      - netbsd
+      - openbsd
     goarch:
+      - 386
       - amd64
+      - arm
       - arm64
+      - ppc64le
+      - mips64le
+      - s390x
+    goarm:
+      - 5
+      - 7
+    gomips:
+      - hardfloat
+    ignore:
+      - goos: windows
+        goarch: 386
 checksum:
   name_template: 'checksums.txt'
 snapshot:
