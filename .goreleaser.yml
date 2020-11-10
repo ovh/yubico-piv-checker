@@ -45,3 +45,20 @@ nfpms:
     formats:
       - deb
       - rpm
+    overrides:
+      deb:
+        file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Arch }}{{ if .Arm }}{{ .Arm }}{{ end }}"
+        replacements:
+          386: i386
+          5: el
+          7: hf
+          mips64le: mips64el
+      rpm:
+        file_name_template: "{{ .ProjectName }}-{{ .Version }}.{{ .Arch }}{{ if .Arm }}{{ .Arm }}{{ end }}"
+        replacements:
+          386: i386
+          amd64: x86_64
+          arm64: aarch64
+          5: v7l
+          7: v7hnl
+          mips64le: mips64el
