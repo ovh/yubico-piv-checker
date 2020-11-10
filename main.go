@@ -44,7 +44,7 @@ func VerifySSHKey(sshKey string, attestation string, keyCertificate string) (*Re
 		return nil, errors.Wrap(err, "Failed to compute SSH Key from attestation")
 	}
 	if !bytes.Equal(sshPubKey.Marshal(), attPubKey.Marshal()) {
-		return nil, errors.New("SSH Key doesn't match attesation")
+		return nil, errors.New("SSH Key doesn't match attestation")
 	}
 
 	// Parse key certificate and verify attestation signature
