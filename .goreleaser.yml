@@ -1,6 +1,4 @@
-before:
-  hooks:
-    - go mod download
+version: 2
 builds:
   - env:
       - CGO_ENABLED=0
@@ -23,10 +21,9 @@ builds:
       - "7"
     gomips:
       - hardfloat
+    main: ./cmd/yubico-piv-checker
 checksum:
   name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
 nfpms:

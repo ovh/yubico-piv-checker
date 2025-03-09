@@ -1,9 +1,11 @@
-package main
+package checker_test
 
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/maxatome/go-testdeep/td"
+	"github.com/ovh/yubico-piv-checker/lib/checker"
+	"github.com/ovh/yubico-piv-checker/lib/types"
 )
 
 var sshKey = `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClBrnz47s5ER1vnhBSaKIYddvDBty9LFoLOJ3/EmJahzMex80vZA61QO+vRAjM64gwDHgtmoSjiwCAq20J7EZgqJDOuxgX5zLG7rA6xxooQEvVMkmKlHkIeCnBlOwhtr5YjQ4hk0DboLK+955c7kiqW7dJkzHVnzyYG0ILQiSlrY+cCEa/UceGv74fgMQe71B8UC32N27IxN/gssqgHSvgMiQ8nMNQJW2h0mIT3/pKceu+gt4qscZCYYq9Qoz6tPIDZA7KaBZb0Y7kSAenEwjsTQvy5/iE8ELPRBZtmHdW/R78bljX/UZ5sEN5lw9MRHz2zFhFPxdcfpnnQopFH0QJ`
@@ -48,13 +50,21 @@ LL62+racaCSKom8Ty1yBgNiZmcho8+buAfU=
 -----END CERTIFICATE-----`
 
 func TestCheck(t *testing.T) {
-	result, err := VerifySSHKey(sshKey, attestation, keyCertificate)
-	assert.NoError(t, err)
+	result, err := checker.VerifySSHKey(sshKey, attestation, keyCertificate)
+	td.Require(t).CmpNoError(err)
 
-	assert.Equal(t, "46:00:b0:eb:d1:fd:b7:86:ea:da:09:7a:49:dd:e3:56", result.SSHKey.FingerprintMD5)
-	assert.Equal(t, "SHA256:V0yDye/t5QVSC6nAnQ8MsgYUS/bZZKQmB0cYk6+UgqI", result.SSHKey.FingerprintSHA)
-	assert.Equal(t, 5970478, result.Yubikey.SerialNumber)
-	assert.Equal(t, "4.3.5", result.Yubikey.FirmwareVersion)
-	assert.Equal(t, PinPolicyAlways, result.Yubikey.PinPolicy)
-	assert.Equal(t, TouchPolicyNever, result.Yubikey.TouchPolicy)
+	td.Cmp(t, result, td.Struct(
+		&types.Result{
+			SSHKey: types.SSHKey{
+				FingerprintMD5: "46:00:b0:eb:d1:fd:b7:86:ea:da:09:7a:49:dd:e3:56",
+				FingerprintSHA: "SHA256:V0yDye/t5QVSC6nAnQ8MsgYUS/bZZKQmB0cYk6+UgqI",
+			},
+			Yubikey: types.Yubikey{
+				SerialNumber:    5970478,
+				FirmwareVersion: "4.3.5",
+				PinPolicy:       types.PinPolicyAlways,
+				TouchPolicy:     types.TouchPolicyNever,
+			},
+		},
+	))
 }

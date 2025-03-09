@@ -1,4 +1,4 @@
-package main
+package types
 
 //go:generate enumer -type YubicoPinPolicy -json -text -trimprefix PinPolicy
 //go:generate enumer -type YubicoTouchPolicy -json -text -trimprefix TouchPolicy
@@ -19,15 +19,19 @@ const (
 	TouchPolicyCached15s
 )
 
+type SSHKey struct {
+	FingerprintMD5 string
+	FingerprintSHA string
+}
+
+type Yubikey struct {
+	SerialNumber    int
+	FirmwareVersion string
+	PinPolicy       YubicoPinPolicy
+	TouchPolicy     YubicoTouchPolicy
+}
+
 type Result struct {
-	SSHKey struct {
-		FingerprintMD5 string
-		FingerprintSHA string
-	}
-	Yubikey struct {
-		SerialNumber    int
-		FirmwareVersion string
-		PinPolicy       YubicoPinPolicy
-		TouchPolicy     YubicoTouchPolicy
-	}
+	SSHKey  SSHKey
+	Yubikey Yubikey
 }

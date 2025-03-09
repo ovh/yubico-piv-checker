@@ -1,4 +1,9 @@
-package main
+package checker
+
+import (
+	"crypto/x509"
+	"fmt"
+)
 
 // See https://developers.yubico.com/PIV/Introduction/PIV_attestation.html
 var oidExtensionYubikeyFirmware = []int{1, 3, 6, 1, 4, 1, 41482, 3, 3}
@@ -25,3 +30,15 @@ bW5yWvyS9zNXaqGaUmP3U9/b6DlHdDogMLu3VLpBB9bm5bjaKWWJYgWltCVgUbFq
 Fqyi4+JE014cSgR57Jcu3dZiehB6UtAPgad9L5cNvua/IWRmm+ANy3O2LH++Pyl8
 SREzU8onbBsjMg9QDiSf5oJLKvd/Ren+zGY7
 -----END CERTIFICATE-----`
+
+var yubiCert *x509.Certificate
+
+func init() {
+	// Parse YubicoCA and verify keyCertificate signature
+	cert, err := parseCertificate(yubicoCertificate)
+	if err != nil {
+		panic(fmt.Errorf("failed to parse Yubico Certificate: %w", err))
+	}
+
+	yubiCert = cert
+}
