@@ -49,7 +49,8 @@ func VerifySSHKey(sshKey string, attestation string, keyCertificate string) (*ty
 	if err != nil {
 		return nil, fmt.Errorf("invalid attestation signature: %w", err)
 	}
-	err = yubiCert.CheckSignature(keyCert.SignatureAlgorithm, keyCert.RawTBSCertificate, keyCert.Signature)
+
+	_, err = keyCert.Verify(x509.VerifyOptions{Roots: yubiCertPoolRoots, Intermediates: yubiCertPoolIntermediates})
 	if err != nil {
 		return nil, fmt.Errorf("invalid Key Certificate signature: %w", err)
 	}
