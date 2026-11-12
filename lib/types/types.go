@@ -22,6 +22,19 @@ const (
 type SSHKey struct {
 	FingerprintMD5 string
 	FingerprintSHA string
+	Type           string // RSA, ECDSA, Ed25519
+	PublicKey      string
+}
+
+type Certificate struct {
+	Subject       string
+	Issuer        string
+	SerialNumber  string
+	NotBefore     string
+	NotAfter      string
+	KeyUsage      []string
+	IsValidCA     bool
+	TrustedCAPath []string // Chain of trusted CAs
 }
 
 type Yubikey struct {
@@ -32,6 +45,7 @@ type Yubikey struct {
 }
 
 type Result struct {
-	SSHKey  SSHKey
-	Yubikey Yubikey
+	SSHKey      SSHKey
+	Certificate Certificate
+	Yubikey     Yubikey
 }
